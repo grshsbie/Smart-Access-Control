@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>User Control Panel</title>
+</head>
+<body>
+   <h1>Welcome, <%= user.username %>!</h1>
+   <p>You can control the door from here.</p>
+
+   <button id="openDoor">Open Door</button>
+   <button id="closeDoor">Close Door</button>
+
+   <script>
+      document.getElementById('openDoor').addEventListener('click', function() {
+         fetch('/esp32/open', { method: 'POST' })
+            .then(response => alert('Door opened'))
+            .catch(err => console.log('Error:', err));
+      });
+
+      document.getElementById('closeDoor').addEventListener('click', function() {
+         fetch('/esp32/close', { method: 'POST' })
+            .then(response => alert('Door closed'))
+            .catch(err => console.log('Error:', err));
+      });
+   </script>
+</body>
+</html>

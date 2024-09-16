@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Door Control PWA</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <h1>Welcome to the Door Control System</h1>
+
+  <p>This web app allows you to control your doors using an ESP32 module. Please log in or register to continue.</p>
+
+  <a href="/auth/login">Login</a>
+  <a href="/auth/register/user">Register as User</a>
+  <a href="/auth/register/admin">Register as Admin</a>
+
+  <!-- Include Main JavaScript -->
+  <script src="/js/main.js"></script>
+
+  <!-- Register service worker for PWA functionality -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/js/serviceWorker.js')
+        .then(function(registration) {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(function(error) {
+          console.log('Service Worker registration failed:', error);
+        });
+    }
+  </script>
+</body>
+</html>

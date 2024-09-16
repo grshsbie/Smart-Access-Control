@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Admin Dashboard</title>
+</head>
+<body>
+   <h1>Welcome, Admin <%= admin.username %>!</h1>
+   <p>Here you can view the logs and manage users.</p>
+
+   <h2>User Activity Logs</h2>
+   <ul>
+      <% logs.forEach(function(log) { %>
+         <li>
+            <strong><%= log.username %></strong> opened the door at <%= log.openTime %> and closed it at <%= log.closeTime %>
+         </li>
+      <% }); %>
+   </ul>
+
+   <h2>Manage Users</h2>
+   <!-- Form for managing users can be added here -->
+
+</body>
+</html>
