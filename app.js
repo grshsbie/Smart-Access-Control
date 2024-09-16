@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const path = require('path');
@@ -8,20 +9,26 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-
+//P5DjNdhbIaG9Rr6H
 // Initialize the app
 const app = express();
 
 // Connect to the database
 connectDB();
 
-// Set view engine to EJS
-app.set('view engine', 'ejs');
+// Enable CORS for all routes
+app.use(cors());
+
+// Handle preflight requests for all routes
+app.options('*', cors());  // This will handle OPTIONS requests sent by the browser for preflight checks
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cookieParser()); // Required to handle JWT tokens in cookies
+app.use(cookieParser()); // For handling cookies
+
+// Set view engine to EJS
+app.set('view engine', 'ejs');
 
 // Routes
 app.use('/auth', authRoutes);

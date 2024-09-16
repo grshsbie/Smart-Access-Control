@@ -2,30 +2,60 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-// Render user registration page
 exports.registerUserPage = (req, res) => {
    res.render('registerUser');
 };
 
-// Render admin registration page
 exports.registerAdminPage = (req, res) => {
    res.render('registerAdmin');
 };
 
-// User registration logic
+
+
 exports.registerUser = async (req, res) => {
-   const { username, password } = req.body;
-   try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = new User({ username, password: hashedPassword, role: 'user' });
-      await newUser.save();
-      res.redirect('/auth/login');
-   } catch (error) {
-      res.status(500).send('Error while registering user');
-   }
+  try {
+    console.log('Received POST request for user registration:', req.body); // Debug log
+
+    // Extract the username and password from the request body
+    const { username, password } = req.body;
+
+    // Check if both fields are provided
+    if (!username || !password) {
+      console.log('Missing username or password'); // Debug log
+      return res.status(400).send('Username and password are required');
+    }
+
+    // Check if the user already exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      console.log('User already exists'); // Debug log
+      return res.status(400).send('User already exists');
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log('Password hashed successfully'); // Debug log
+
+    // Create a new user
+    const newUser = new User({
+      username,
+      password: hashedPassword,
+      role: 'user' // default role as user
+    });
+
+    // Save the user to the database
+    await newUser.save();
+    console.log('User registered successfully'); // Debug log
+
+    // Redirect to login after successful registration
+    res.redirect('/auth/login');
+  } catch (error) {
+    console.error('Error during user registration:', error); // Detailed error log
+    res.status(500).send('Internal Server Error');
+  }
 };
 
-// Admin registration logic
+
 exports.registerAdmin = async (req, res) => {
    const { username, password } = req.body;
    try {
@@ -38,8 +68,7 @@ exports.registerAdmin = async (req, res) => {
    }
 };
 
-// Render login page
-exports.loginPage = (req, res) => {
+ exports.loginPage = (req, res) => {
    res.render('login');
 };
 
