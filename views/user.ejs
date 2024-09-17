@@ -1,29 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>User Control Panel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Control Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #000000, #000000); /* Keep the same dark background */
+        }
+
+        /* 3D Button Effect */
+        .btn-3d {
+            position: relative;
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            color: white;
+            border-radius: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-3d:before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            z-index: -1;
+        }
+
+        .btn-3d:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 </head>
-<body>
-   <h1>Welcome, <%= user.username %>!</h1>
-   <p>You can control the door from here.</p>
+<body class="bg-gradient-to-br from-gray-800 to-gray-900 min-h-screen flex items-center justify-center">
+    <div class="bg-black/40 backdrop-blur-md p-8 rounded-xl shadow-lg text-center text-white w-full max-w-md">
+        <h1 class="text-4xl font-extrabold mb-4">Welcome, <%= user.username %>!</h1>
+        <p class="text-lg text-gray-400 mb-8">You can control the door from here.</p>
 
-   <button id="openDoor">Open Door</button>
-   <button id="closeDoor">Close Door</button>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <!-- 3D Open Door Button -->
+            <button id="openDoor" class="btn-3d bg-green-500 hover:bg-green-600">
+                Open Door
+            </button>
+            <!-- 3D Close Door Button -->
+            <button id="closeDoor" class="btn-3d bg-red-500 hover:bg-red-600">
+                Close Door
+            </button>
+        </div>
+    </div>
 
-   <script>
-      document.getElementById('openDoor').addEventListener('click', function() {
-         fetch('/esp32/open', { method: 'POST' })
-            .then(response => alert('Door opened'))
-            .catch(err => console.log('Error:', err));
-      });
+    <script>
+        document.getElementById('openDoor').addEventListener('click', function() {
+            fetch('/esp32/open', { method: 'POST' })
+                .then(response => alert('Door opened'))
+                .catch(err => console.log('Error:', err));
+        });
 
-      document.getElementById('closeDoor').addEventListener('click', function() {
-         fetch('/esp32/close', { method: 'POST' })
-            .then(response => alert('Door closed'))
-            .catch(err => console.log('Error:', err));
-      });
-   </script>
+        document.getElementById('closeDoor').addEventListener('click', function() {
+            fetch('/esp32/close', { method: 'POST' })
+                .then(response => alert('Door closed'))
+                .catch(err => console.log('Error:', err));
+        });
+    </script>
 </body>
 </html>
